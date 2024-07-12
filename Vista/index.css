@@ -1,106 +1,162 @@
-/* styles.css */
-
+/* Estilos generales */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    line-height: 1.6;
+    background-color: #1c1e26;
+    color: #fff;
     margin: 0;
+    padding: 0;
 }
 
 .container {
-    background-color: #fff;
+    max-width: 900px;
+    margin: 20px auto;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    max-width: 800px;
-    width: 100%;
+    background-color: #2b2e3b;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
 }
 
 h1 {
     text-align: center;
+    color: #fff;
 }
 
-h2 {
-    background-color: #f0f0f0;
+/* Estilos para las vistas insertar, listado y editar */
+.vista-insertar,
+.vista-listado,
+.vista-editar {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #2b2e3b;
+    border: 1px solid #38404f;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.vista-insertar h2,
+.vista-listado h2,
+.vista-editar h2 {
+    color: #fff;
+}
+
+/* Estilos para la tabla de facturación */
+#tablaFacturacion {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#tablaFacturacion th,
+#tablaFacturacion td {
+    border: 1px solid #38404f;
     padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 10px;
+    text-align: center;
 }
 
-a{
-    text-decoration: none;
+#tablaFacturacion th {
+    background-color: #38404f;
+    color: #fff;
 }
 
+#tablaFacturacion td {
+    background-color: #2b2e3b;
+    color: #fff;
+}
+
+/* Estilos para los formularios */
 form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    margin-top: 10px;
 }
 
 form label {
-    flex-basis: 100%;
+    display: block;
+    margin-bottom: 8px;
+    color: #c0c5ce;
 }
 
-form input, form select, form button {
-    flex: 1;
-}
-
-button {
-    flex-basis: 100%;
+form input[type="text"],
+form input[type="number"],
+form select {
+    width: 100%;
     padding: 10px;
-    background-color: #007bff;
+    margin-bottom: 10px;
+    border: 1px solid #38404f;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #2b2e3b;
     color: #fff;
+}
+
+form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
 }
 
-button[type="button"] {
-    background-color: #dc3545;
+form button:hover {
+    background-color: #45a049;
 }
 
-button:hover {
-    background-color: #0056b3;
+/* Estilos para los campos de totales */
+.vista-totales {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #2b2e3b;
+    border: 1px solid #38404f;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-button[type="button"]:hover {
-    background-color: #c82333;
-}
-
-.vista-listado table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.vista-listado th, .vista-listado td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-.vista-totales .totales {
+.totales {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    justify-content: space-between;
 }
 
-.vista-totales .total-item {
-    flex: 1;
+.total-item {
+    width: 25%;
+    text-align: center;
 }
 
-.vista-totales label {
+.total-item label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    color: #c0c5ce;
 }
 
-.vista-totales input {
+.total-item input[type="number"] {
     width: 100%;
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #38404f;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+    background-color: #2b2e3b;
+    color: #fff;
+}
+
+/* Estilos adicionales */
+.alert {
+    padding: 15px;
+    background-color: #f44336;
+    color: white;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Media queries para responsividad */
+@media screen and (max-width: 600px) {
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .total-item {
+        width: 100%;
+        margin-bottom: 10px;
+    }
 }

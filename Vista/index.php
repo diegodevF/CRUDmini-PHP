@@ -39,42 +39,40 @@
         </div>
 
         <div class="vista-listado">
-            <h2>Listado Facturación</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Concepto</th>
-                        <th>Precio</th>
-                        <th>Cantidad</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                        $cant = 0;
-                        $respFacturas = $misFacturas->verFacturas();
-                        foreach($respFacturas as $fila){?>
-                        <tr>
-                            <th><?php echo($fila['item']); ?></th>
-                            <th><?php echo($fila['precio']); ?></th>
-                            <th><?php echo($fila['cantidad']); ?></th>
-                            <th><?php echo( $fila['precio'] * $fila['cantidad']); ?></th>
-                        </tr>
-                        <?php
-                        $cant++;
-                        }
-                        ?>
-                </tbody>
-            </table>
-        </div>
+    <h2>Listado Facturación</h2>
+    <table id="tablaFacturacion">
+        <thead>
+            <tr>
+                <th>Id Factura</th>
+                <th>Concepto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+                $respFacturas = $misFacturas->verFacturas();
+                foreach($respFacturas as $fila){
+                    echo '<tr>';
+                    echo '<td>' . htmlspecialchars($fila['id_factura']) . '</td>';
+                    echo '<td>' . htmlspecialchars($fila['item']) . '</td>';
+                    echo '<td>' . htmlspecialchars($fila['precio']) . '</td>';
+                    echo '<td>' . htmlspecialchars($fila['cantidad']) . '</td>';
+                    echo '<td>' . ($fila['precio'] * $fila['cantidad']) . '</td>';
+                    echo '</tr>';
+                }
+            ?>
+        </tbody>
+    </table>
+</div>
 
-        <div class="vista-editar">
+<div class="vista-editar">
     <h2>Eliminar Item</h2>
     <form id="form-editar">
         <label for="item">Item</label>
-        <select id="item" name="item" onchange="actualizarCampos()">
+        <select id="item" name="item">
             <?php
-                $respFacturas = $misFacturas->verFacturas();
                 foreach($respFacturas as $fila){
                     echo '<option value="' . htmlspecialchars($fila['id_factura']) . '" data-precio="' . htmlspecialchars($fila['precio']) . '" data-cantidad="' . htmlspecialchars($fila['cantidad']) . '">';
                     echo htmlspecialchars($fila['item']);
@@ -90,41 +88,24 @@
         <input type="number" id="cantidad-editar" name="cantidad-editar">
 
         <button type="submit" id="ModificarItem">Modificar Item</button>
-        <button type="button" id="EliminarItem">Eliminar Item</button>
+        <button type="button" id="EliminarItem">Eliminar Item del Listado</button>
     </form>
 </div>
 
 
-        <!-- <div class="vista-totales">
-            <h2>Totales</h2>
-            <div class="totales">
-                <div class="total-item">
-                    <label for="num-items">Número de items</label>
-                    <input type="number" id="num-items" readonly value="110">
-                </div>
-                <div class="total-item">
-                    <label for="subtotal">Subtotal</label>
-                    <input type="number" id="subtotal" readonly value="376.0">
-                </div>
-                <div class="total-item">
-                    <label for="iva">IVA</label>
-                    <input type="number" id="iva" readonly value="56.4">
-                </div>
-                <div class="total-item">
-                    <label for="total">Total</label>
-                    <input type="number" id="total" readonly value="432.4">
-                </div>
-            </div>
-        </div>
-    </div> -->
 
+            <!--ENTRADA DE SCRIPTS-->
+            <!-- Acciones facturas en Javascripts -->
     <script src="../Controlador/factura.js"></script>
+
     <script type="text/javascript">
             $(document).ready(function(){
                 iniciarPagina()
             })
-        </script>
-        <script>
+</script>
+
+<!-- Actualizar los campos de items -->
+<script>
     function actualizarCampos() {
         const select = document.getElementById("item");
         const selectedOption = select.options[select.selectedIndex];
@@ -140,6 +121,127 @@
     window.onload = function() {
         actualizarCampos();
     };
+</script>
+
+<!-- ELiminar el item del listado sin eliminarlo de la base de datos -->
+<script>
+  $(document).ready(function() {
+    // Función para eliminar el ítem del listado y de la tabla de facturación
+    $('#EliminarItem').click(function() {
+        var selectedItem = $('#item').val(); // Obtener el valor seleccionado del select
+
+        if (selectedItem) {
+            // Eliminar la opción del select
+            $('#item option[value="' + selectedItem + '"]').remove();
+
+            // Eliminar la fila correspondiente en la tabla de listado de facturación
+            $('.vista-listado table tbody').find('tr').each(function() {
+                var idFactura = $(this).find('td:first-child').text();
+                if (idFactura === selectedItem) {
+                    $(this).remove();
+                    return false; // Salir del bucle al encontrar y eliminar la fila
+                }
+            });
+
+            // Limpiar los campos de precio y cantidad después de eliminar
+            $('#precio-editar').val('');
+            $('#cantidad-editar').val('');
+            
+            alert('Ítem eliminado del listado y de la tabla de facturación.');
+        } else {
+            alert('Selecciona un ítem para eliminar del listado.');
+        }
+    });
+
+    // Evento change en el select para actualizar los campos de precio y cantidad
+    $('#item').change(function() {
+        var selectedItem = $(this).val();
+        var selectedOption = $(this).find('option:selected');
+
+        if (selectedOption.length > 0) {
+            var precio = selectedOption.data('precio');
+            var cantidad = selectedOption.data('cantidad');
+
+            $('#precio-editar').val(precio); // Actualizar el campo de precio
+            $('#cantidad-editar').val(cantidad); // Actualizar el campo de cantidad
+        } else {
+            $('#precio-editar').val(''); // Limpiar el campo de precio si no hay opción seleccionada
+            $('#cantidad-editar').val(''); // Limpiar el campo de cantidad si no hay opción seleccionada
+        }
+    });
+
+    // Evento submit del formulario (para modificar el ítem, si necesario)
+    $('#form-editar').submit(function(event) {
+        event.preventDefault(); // Prevenir el envío del formulario de manera tradicional
+        // Aquí puedes agregar la lógica para enviar los datos modificados al servidor si es necesario
+    });
+});
+</script>
+
+<!-- Actualizar las vistas totales -->
+<script>
+// Función para calcular y actualizar totales
+function actualizarTotales() {
+    var numItems = 0;
+    var subtotal = 0;
+
+    // Recorrer cada fila de la tabla de facturación para calcular subtotal y contar ítems
+    $('#tablaFacturacion tbody tr').each(function() {
+        var precio = parseFloat($(this).find('td:nth-child(3)').text());
+        var cantidad = parseInt($(this).find('td:nth-child(4)').text());
+        var totalItem = precio * cantidad;
+        subtotal += totalItem;
+        numItems++;
+    });
+
+    // Calcular IVA (15% del subtotal)
+    var iva = subtotal * 0.15;
+    var total = subtotal + iva;
+
+    // Actualizar los valores en los campos de totales
+    $('#num-items').val(numItems);
+    $('#subtotal').val(subtotal.toFixed(2));
+    $('#iva').val(iva.toFixed(2));
+    $('#total').val(total.toFixed(2));
+}
+
+// Llamar a actualizarTotales() al cargar la página
+$(document).ready(function() {
+    actualizarTotales();
+
+    // Escuchar cambios en la tabla de facturación
+    $('#tablaFacturacion').on('change', 'input, select', function() {
+        actualizarTotales();
+    });
+
+    // Escuchar cambios en el select de item para mostrar precio y cantidad seleccionados
+    $('#item').change(function() {
+        var precioSeleccionado = $(this).find(':selected').data('precio');
+        var cantidadSeleccionada = $(this).find(':selected').data('cantidad');
+
+        $('#precio-editar').val(precioSeleccionado);
+        $('#cantidad-editar').val(cantidadSeleccionada);
+    });
+
+    // Escuchar clic en el botón "Eliminar Item del Listado"
+    $('#EliminarItem').click(function() {
+        // Aquí deberías implementar la lógica para eliminar físicamente la fila de la tabla
+        // y luego llamar a actualizarTotales() para recalcular los totales.
+        // Por simplicidad, solo actualizamos los totales sin eliminar físicamente aquí.
+        actualizarTotales();
+    });
+
+    // Escuchar submit del formulario de editar para modificar item
+    $('#form-editar').submit(function(e) {
+        e.preventDefault();
+        // Aquí deberías implementar la lógica para enviar los datos al servidor,
+        // modificar el item en la base de datos y luego actualizar la tabla y los totales.
+        // Por simplicidad, solo actualizamos los totales aquí.
+        actualizarTotales();
+    });
+});
+
+
 </script>
 
 </body>

@@ -7,7 +7,7 @@ class misFacturas{
         $conexion = new Conexion();
         $arreglo = array();
 
-        $consulta = "SELECT item, precio, cantidad FROM `factura` ";
+        $consulta = "SELECT id_factura, item, precio, cantidad FROM `factura` ";
         $modulos = $conexion -> prepare(($consulta));
         $modulos -> execute();
 
