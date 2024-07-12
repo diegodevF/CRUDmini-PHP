@@ -1,0 +1,106 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    max-width: 800px;
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+}
+
+h2 {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+a{
+    text-decoration: none;
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+form label {
+    flex-basis: 100%;
+}
+
+form input, form select, form button {
+    flex: 1;
+}
+
+button {
+    flex-basis: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button[type="button"] {
+    background-color: #dc3545;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button[type="button"]:hover {
+    background-color: #c82333;
+}
+
+.vista-listado table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.vista-listado th, .vista-listado td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.vista-totales .totales {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.vista-totales .total-item {
+    flex: 1;
+}
+
+.vista-totales label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.vista-totales input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
