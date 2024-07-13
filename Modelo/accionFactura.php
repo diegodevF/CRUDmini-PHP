@@ -51,12 +51,14 @@ if (isset($_GET['accion'])) {
     
     elseif($accion == "eliminar") {
 
-        $id_cat = $_POST['id_cat'];
+        $id_factura = $_POST['id_factura'];
+        $precio = $_POST['precio'];
+        $cantidad = $_POST['cantidad'];
 
-        $sqlDel = "DELETE FROM categoria WHERE id_cat = ?";
+    $sqlDel = "DELETE FROM `factura` WHERE `factura`.`id_factura` = ?" ;
 
         $del = $conexion->prepare($sqlDel);
-        $del->bindParam(1, $id_cat);
+        $del->bindParam(1, $id_factura);
 
         // Verificamos que se ejecutó la consulta
         if($del->execute()) {

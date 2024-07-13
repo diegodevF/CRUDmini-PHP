@@ -98,6 +98,19 @@ form button {
     margin-top: 10px;
 }
 
+form a {
+    width: max-content;
+    height: max-content;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    text-decoration: none;
+}
+
 form button:hover {
     background-color: #45a049;
 }
@@ -159,4 +172,12 @@ form button:hover {
         width: 100%;
         margin-bottom: 10px;
     }
+}
+
+.mostrar-cliente h4{
+    display: inline-block;
+}
+
+h4{
+    margin: 5px;
 }

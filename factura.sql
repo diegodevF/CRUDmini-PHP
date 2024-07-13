@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-07-2024 a las 06:00:42
+-- Tiempo de generación: 12-07-2024 a las 16:34:54
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -24,6 +24,25 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `cliente`
+--
+
+CREATE TABLE `cliente` (
+  `id_cliente` int(11) NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `documento` int(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `cliente`
+--
+
+INSERT INTO `cliente` (`id_cliente`, `nombre`, `documento`) VALUES
+(1, 'Diego', 1127044793);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `factura`
 --
 
@@ -39,12 +58,17 @@ CREATE TABLE `factura` (
 --
 
 INSERT INTO `factura` (`id_factura`, `item`, `precio`, `cantidad`) VALUES
-(8, 'Tv', 500, 15),
-(11, 'Pc', 200, 10);
+(25, 'ejemplo', 500, 5);
 
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `cliente`
+--
+ALTER TABLE `cliente`
+  ADD PRIMARY KEY (`id_cliente`);
 
 --
 -- Indices de la tabla `factura`
@@ -57,10 +81,16 @@ ALTER TABLE `factura`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `cliente`
+--
+ALTER TABLE `cliente`
+  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de la tabla `factura`
 --
 ALTER TABLE `factura`
-  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

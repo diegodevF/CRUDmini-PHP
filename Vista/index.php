@@ -1,6 +1,8 @@
 <?php
     require_once "../Modelo/verFactura.php";
+    require_once "../Modelo/verCliente.php";
     $misFacturas = new misFacturas();
+    $misClientes = new misClientes();
 ?>
 
 <!DOCTYPE html>
@@ -10,13 +12,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interfaz de Aplicación Básica</title>
     <link rel="stylesheet" href="index.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-    crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-    crossorigin="anonymous"></script>
+    <?php
+        require_once("../Bibliotecas/addOns.php");
+    ?>
 </head>
 <body>
     <div class="container">
@@ -25,7 +23,7 @@
         <div class="vista-insertar">
             <h2>Insertar Item</h2>
             <form id="form-insertar" method="POST">
-                <label for="concepto">Concepto</label>
+                <label for="concepto">Item</label>
                 <input type="text" id="concepto" name="item" required>
                 
                 <label for="precio">Precio por Unidad</label>
@@ -34,17 +32,29 @@
                 <label for="cantidad">Cantidad</label>
                 <input type="number" id="cantidad" name="cantidad" required>
                 
-                <button type="submit" id="registrar">Añadir</button>
+                <button type="submit" id="registrar">Añadir Item</button>
+                <button id="añadir-cliente"> <a href="./cliente.php">Añadir Cliente</a> </button>
             </form>
         </div>
 
         <div class="vista-listado">
+            <div class="mostrar-cliente">
+                <h4>Cliente: <?php
+            $cliente = $misClientes->verClientes();
+            echo htmlspecialchars($cliente['nombre']); 
+            ?>
+            </h4>
+            <h4>
+               Documento del cliente: <?php echo htmlspecialchars($cliente['documento']);  ?>
+            </h4>
+            </div>
+
     <h2>Listado Facturación</h2>
     <table id="tablaFacturacion">
         <thead>
             <tr>
                 <th>Id Factura</th>
-                <th>Concepto</th>
+                <th>Item</th>
                 <th>Precio</th>
                 <th>Cantidad</th>
                 <th>Total</th>
@@ -74,7 +84,7 @@
         <select id="item" name="item">
             <?php
                 foreach($respFacturas as $fila){
-                    echo '<option value="' . htmlspecialchars($fila['id_factura']) . '" data-precio="' . htmlspecialchars($fila['precio']) . '" data-cantidad="' . htmlspecialchars($fila['cantidad']) . '">';
+                    echo '<option id="id_factura" value="' . htmlspecialchars($fila['id_factura']) . '" data-precio="' . htmlspecialchars($fila['precio']) . '" data-cantidad="' . htmlspecialchars($fila['cantidad']) . '">';
                     echo htmlspecialchars($fila['item']);
                     echo '</option>';
                 }
@@ -88,10 +98,32 @@
         <input type="number" id="cantidad-editar" name="cantidad-editar">
 
         <button type="submit" id="ModificarItem">Modificar Item</button>
-        <button type="button" id="EliminarItem">Eliminar Item del Listado</button>
+        <button type="button" id="EliminarItem">Eliminar Item</button>
     </form>
 </div>
 
+<div class="vista-totales">
+            <h2>Totales</h2>
+            <div class="totales">
+                <div class="total-item">
+                    <label for="num-items">Número de items</label>
+                    <input type="number" id="num-items" readonly value="0">
+                </div>
+                <div class="total-item">
+                    <label for="subtotal">Subtotal</label>
+                    <input type="number" id="subtotal" readonly value="0">
+                </div>
+                <div class="total-item">
+                    <label for="iva">IVA</label>
+                    <input type="number" id="iva" readonly value="0">
+                </div>
+                <div class="total-item">
+                    <label for="total">Total</label>
+                    <input type="number" id="total" readonly value="0">
+                </div>
+            </div>
+        </div>
+    </div>
 
 
             <!--ENTRADA DE SCRIPTS-->
@@ -102,7 +134,7 @@
             $(document).ready(function(){
                 iniciarPagina()
             })
-</script>
+    </script>
 
 <!-- Actualizar los campos de items -->
 <script>
@@ -176,6 +208,44 @@
         // Aquí puedes agregar la lógica para enviar los datos modificados al servidor si es necesario
     });
 });
+</script>
+
+<!-- Totales -->
+<script>
+$(document).ready(function() {
+    function actualizarTotales(items) {
+        let numItems = 0;
+        let subtotal = 0;
+        const porcentajeIVA = 0.19; // 21% IVA
+
+        items.forEach(item => {
+            numItems += item.cantidad;
+            subtotal += item.precio * item.cantidad;
+        });
+
+        let iva = subtotal * porcentajeIVA;
+        let total = subtotal + iva;
+
+        $('#num-items').val(numItems);
+        $('#subtotal').val(subtotal.toFixed(2));
+        $('#iva').val(iva.toFixed(2));
+        $('#total').val(total.toFixed(2));
+    }
+
+    $.ajax({
+        url: "../Modelo/getItems.php",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            actualizarTotales(data);
+        },
+        error: function(xhr, status, error) {
+            console.error("Error al obtener los datos:", status, error);
+            alert("Error al obtener los datos.");
+        }
+    });
+});
+
 </script>
 
 </body>
